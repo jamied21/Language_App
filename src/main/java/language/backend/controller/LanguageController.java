@@ -2,6 +2,7 @@ package language.backend.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+
 
 import jakarta.validation.Valid;
 import language.backend.model.Language;
@@ -65,13 +68,15 @@ public class LanguageController {
 	@GetMapping("/{id}")
 	public ResponseEntity<?> findLangaugeById(@PathVariable Integer id) {
 
-		if (this.languageService.findLanguageById(id) != null) {
+		Language languageInDb = this.languageService.findLanguageById(id);
 
-			return new ResponseEntity<>(HttpStatus.OK);
+		if (languageInDb == null) {
+
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 		}
 
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(languageInDb, HttpStatus.OK);
 	}
 
 	@GetMapping

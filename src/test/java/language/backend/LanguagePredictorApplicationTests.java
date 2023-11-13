@@ -1,4 +1,4 @@
-package language.Language_Predictor;
+package language.backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
