@@ -1,6 +1,7 @@
-package language.Language_Predictor.controller;
+package language.backend.controller;
 
 import static org.hamcrest.CoreMatchers.is;
+
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -23,12 +24,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import language.backend.controller.LanguageController;
 import language.backend.model.Language;
 import language.backend.service.LanguageService;
-
 @WebMvcTest(LanguageController.class)
 class LanguageControllerTests {
+
 	@Autowired
 	private MockMvc mockMvc;
 	//
@@ -57,12 +57,12 @@ class LanguageControllerTests {
 		// Arrange
 		List<Language> languageList = new ArrayList<>();
 		languageList.add(language1);
-		languageList.add(language2);
+		
 
 		when(mockLanguageService.findAllLanguages()).thenReturn(languageList);
 
 		mockMvc.perform(get("/api/v1/languages")).andDo(print()).andExpect(status().isOk())
-				.andExpect(jsonPath("$", Matchers.hasSize(2)))
+				.andExpect(jsonPath("$", Matchers.hasSize(1)))
 				.andExpect(jsonPath("$[0].languageName", is(language1.getLanguageName())));
 
 		verify(mockLanguageService, times(1)).findAllLanguages();

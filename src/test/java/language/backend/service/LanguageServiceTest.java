@@ -1,4 +1,6 @@
-package language.Language_Predictor.service;
+package language.backend.service;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
@@ -23,7 +25,8 @@ import language.backend.repository.LanguageRepository;
 import language.backend.service.LanguageServiceImp;
 
 @ExtendWith(MockitoExtension.class)
-class LanguageServiceTests {
+class LanguageServiceTest {
+
 	@InjectMocks
 	private LanguageServiceImp mockLanguageService;
 
@@ -125,4 +128,5 @@ class LanguageServiceTests {
 		language1 = null;
 		language2 = null;
 	}
+
 }
