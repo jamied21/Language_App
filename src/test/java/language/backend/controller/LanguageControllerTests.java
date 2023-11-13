@@ -1,5 +1,5 @@
 package language.backend.controller;
-
+import static org.mockito.BDDMockito.given;
 import static org.hamcrest.CoreMatchers.is;
 
 import static org.mockito.Mockito.times;
@@ -16,6 +16,7 @@ import java.util.List;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -53,6 +54,35 @@ class LanguageControllerTests {
 	}
 
 	@Test
+	@DisplayName("Find language by Id - positive")
+	public void givenId_whenFindLanguage_thenReturnCorrrectLanguage() throws Exception {
+		// Arrange
+		
+		
+		given(mockLanguageService.findLanguageById(1)).willReturn(language1);
+
+		mockMvc.perform(get("/api/v1/languages/1")).andDo(print()).andExpect(status().isOk())
+				.andExpect(jsonPath("$.languageName", is(language1.getLanguageName())));
+
+		verify(mockLanguageService, times(1)).findLanguageById(1);
+
+	}
+	
+	@Test
+	@DisplayName("Find language by Id - negative")
+	public void givenNonExistentId_whenFindLanguage_thenReturnNotFound() throws Exception {
+		// Arrange
+		
+		
+		given(mockLanguageService.findLanguageById(3)).willReturn(null);
+
+		mockMvc.perform(get("/api/v1/languages/3")).andDo(print()).andExpect(status().isNotFound());
+				
+		verify(mockLanguageService, times(1)).findLanguageById(3);
+
+	}
+	
+	@Test
 	public void givenNothing_whenFindAllLanguages_thenReturnAllSavedLanguages() throws Exception {
 		// Arrange
 		List<Language> languageList = new ArrayList<>();
@@ -68,6 +98,8 @@ class LanguageControllerTests {
 		verify(mockLanguageService, times(1)).findAllLanguages();
 
 	}
+	
+	
 
 	@AfterEach
 	void tearDown() throws Exception {
