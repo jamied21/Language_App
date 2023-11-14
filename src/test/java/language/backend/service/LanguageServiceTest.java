@@ -36,6 +36,7 @@ class LanguageServiceTest {
 	@Mock
 	private Language language1;
 	private Language language2;
+	private Language language3;
 
 	@BeforeEach
 	void setUp() {
@@ -45,6 +46,9 @@ class LanguageServiceTest {
 
 		language2 = new Language("Cat4", "Mandarin");
 		language2.setLanguageId(2);
+		
+		language3 = new Language("Cat1", "English");
+		language3.setLanguageId(3);
 
 	}
 
@@ -121,6 +125,26 @@ class LanguageServiceTest {
 		assertThat(result).isEqualTo(false);
 		verify(mockLanguageRepository, times(0)).save(language1);
 
+	}
+	
+	@Test
+	@DisplayName("Find languages by difficulty level")
+	void arrangeLanguageLists_actfindLanguagesWithDifficultyLevel_assertLanguagesAreCorrect() {
+		// Arrange - What you expect to happen
+		List<Language> expectedList = new ArrayList<>();
+		expectedList.add(language1);
+	
+		expectedList.add(language3);
+		
+		when(mockLanguageRepository.findByDifficultyLevel("Cat1")).thenReturn(expectedList);
+		// Act - test the service and see what actually happens
+		List<Language> result = mockLanguageService.findLanguagesByDifficultyLevel("Cat1");
+		// Assert - checking to see if the actual results meet your expectation
+		assertThat(result).isNotNull();
+		assertEquals(expectedList, result);
+		assertThat(result.size()).isEqualTo(2);
+		assertThat(result.get(0).getLanguageId()).isEqualTo(language1.getLanguageId());
+		verify(mockLanguageRepository, times(1)).findByDifficultyLevel("Cat1");
 	}
 
 	@AfterEach

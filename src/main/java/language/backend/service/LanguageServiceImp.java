@@ -24,7 +24,7 @@ public class LanguageServiceImp implements LanguageService {
 	@Override
 	public List<Language> findAllLanguages() {
 
-		return languageRepository.findAll();
+		return this.languageRepository.findAll();
 	}
 
 	@Override
@@ -51,9 +51,12 @@ public class LanguageServiceImp implements LanguageService {
 		return false;
 	}
 
-	/*
-	 * @Override public List<Language> findLanguagesByDifficultyLevel(String
-	 * difficultyLevel) { // TODO Auto-generated method stub return null; }
-	 */
+	@Override
+	public List<Language> findLanguagesByDifficultyLevel(String difficultyLevel) {
+		
+		return this.languageRepository.findByDifficultyLevel(difficultyLevel);
+	}
+
+	
 
 }

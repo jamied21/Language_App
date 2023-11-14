@@ -49,6 +49,7 @@ class LanguageControllerTests {
 
 	private Language language1;
 	private Language language2;
+	private Language language3;
 
 	@Autowired
 	private ObjectMapper objectMapper; // needed to convert to JSON object
@@ -61,6 +62,9 @@ class LanguageControllerTests {
 
 		language2 = new Language("Cat4", "Mandarin");
 		language2.setLanguageId(2);
+		
+		language3 = new Language("Cat1", "English");
+		language3.setLanguageId(3);
 	}
 	
 	@Test
@@ -114,14 +118,14 @@ mockMvc.perform(post("/api/v1/languages").contentType(MediaType.APPLICATION_JSON
 	@DisplayName("Update language by Id - negative")
 	public void givenId_whenFindLanguage_thenReturnFalseAndNotFound() throws Exception {
 		
-		    when(mockLanguageService.updateLanguageById(eq(3), any(Language.class))).thenReturn(false);
+		    when(mockLanguageService.updateLanguageById(eq(10), any(Language.class))).thenReturn(false);
 
-		    mockMvc.perform(put("/api/v1/languages/{id}", 3)
+		    mockMvc.perform(put("/api/v1/languages/{id}", 10)
 		            .contentType(MediaType.APPLICATION_JSON)
 		            .content(objectMapper.writeValueAsString(language1)))
 		            .andExpect(status().isNotFound());
 		    
-		    verify(mockLanguageService, times(1)).updateLanguageById(eq(3), any(Language.class));
+		    verify(mockLanguageService, times(1)).updateLanguageById(eq(10), any(Language.class));
 		}
 	
 	@Test
@@ -145,15 +149,16 @@ mockMvc.perform(post("/api/v1/languages").contentType(MediaType.APPLICATION_JSON
 		// Arrange
 		
 		
-		given(mockLanguageService.findLanguageById(3)).willReturn(null);
+		given(mockLanguageService.findLanguageById(10)).willReturn(null);
 
-		mockMvc.perform(get("/api/v1/languages/3")).andDo(print()).andExpect(status().isNotFound());
+		mockMvc.perform(get("/api/v1/languages/10")).andDo(print()).andExpect(status().isNotFound());
 				
-		verify(mockLanguageService, times(1)).findLanguageById(3);
+		verify(mockLanguageService, times(1)).findLanguageById(10);
 
 	}
 	
 	@Test
+	@DisplayName("Find all languages")
 	public void givenNothing_whenFindAllLanguages_thenReturnAllSavedLanguages() throws Exception {
 		// Arrange
 		List<Language> languageList = new ArrayList<>();
@@ -170,12 +175,36 @@ mockMvc.perform(post("/api/v1/languages").contentType(MediaType.APPLICATION_JSON
 
 	}
 	
+	@Test
+	@DisplayName("Find language by diffcultyLevel - postive ")
+	public void givenDifficultyLevel_whenFindLanguages_thenReturnAllCorrectLanguages() throws Exception {
+		// Arrange
+		List<Language> expectedList = new ArrayList<>();
+		expectedList.add(language1);
+		expectedList.add(language3);
+		String difficultyLevel = "Cat1";
+		
+
+		when(mockLanguageService.findLanguagesByDifficultyLevel(difficultyLevel)).thenReturn(expectedList);
+
+		mockMvc.perform(get("/api/v1/languages/difficultyLevel/{difficultyLevel}",difficultyLevel)).andDo(print()).andExpect(status().isOk())
+				.andExpect(jsonPath("$", Matchers.hasSize(2)))
+				.andExpect(jsonPath("$[0].languageName", is(language1.getLanguageName())))
+				.andExpect(jsonPath("$[1].languageName", is(language3.getLanguageName()))); 
+;
+
+		verify(mockLanguageService, times(1)).findLanguagesByDifficultyLevel(difficultyLevel);
+
+	}
+	
+	
 	
 
 	@AfterEach
 	void tearDown() throws Exception {
 		language1 = null;
 		language2 = null;
+		language3 = null;
 
 	}
 
