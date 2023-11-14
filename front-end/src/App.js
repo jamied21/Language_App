@@ -5,7 +5,8 @@ import Homepage from './pages/HomePage';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle";
 import Navbar from './components/Navbar';
-import LoadLanguages from './components/LoadLanguages';
+
+import LanguageList from './components/LanguageList';
 
 
 function App() {
@@ -14,7 +15,7 @@ function App() {
       <Navbar/>
       <Routes>
         <Route path="/" element = {<Homepage/>}/>
-        <Route path="/languages" element = {<LoadLanguages/>}/>
+        <Route path="/languages" element = {<LanguageList/>}/>
       </Routes>
 
    
