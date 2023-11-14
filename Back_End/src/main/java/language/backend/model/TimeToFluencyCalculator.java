@@ -45,31 +45,45 @@ public class TimeToFluencyCalculator {
 	 * 
 	 * A1 = 60 A2 = 160 B1 = 210 B2 = 260 C1 = 700 C2 = 1000
 	 */
-	private BigDecimal minutesStudied;
+
 	private Language language;
-	private String fluencyLevel;
-	private String currentFluencyLevel;
+
 	
 	
-	public TimeToFluencyCalculator(BigDecimal minutesStudied, Language language, String currentFluencyLevel, String fluencyLevel) {
-		
-		this.minutesStudied = minutesStudied;
+	
+
+
+	public TimeToFluencyCalculator(Language language) {
+		super();
 		this.language = language;
-		this.fluencyLevel = fluencyLevel;
-		this.currentFluencyLevel = currentFluencyLevel;
+	}
+
+
+
+
+
+
+	public Double fluencyCalculator(BigDecimal minutesStudied, Language language, String currentFluencyLevel, String fluencyLevel ) {
 		
 		
+		Double daysToFluency = 1.0;
+		
+		if (language.getDifficultyLevel().equals("Cat1")) {
+			
+			Double catOnemultiplier = 1.0;
+			
+			
+			
+			
+		}
+		
+		
+		return daysToFluency;
 	}
 
 
-	public BigDecimal getMinutesStudied() {
-		return minutesStudied;
-	}
 
 
-	public void setMinutesStudied(BigDecimal minutesStudied) {
-		this.minutesStudied = minutesStudied;
-	}
 
 
 	public Language getLanguage() {
@@ -77,32 +91,16 @@ public class TimeToFluencyCalculator {
 	}
 
 
+
+
+
+
 	public void setLanguage(Language language) {
 		this.language = language;
 	}
-
-
-	public String getFluencyLevel() {
-		return fluencyLevel;
-	}
-
-
-	public void setFluencyLevel(String fluencyLevel) {
-		this.fluencyLevel = fluencyLevel;
-	}
-
-
-	public String getCurrentFluencyLevel() {
-		return currentFluencyLevel;
-	}
-
-
-	public void setCurrentFluencyLevel(String currentFluencyLevel) {
-		this.currentFluencyLevel = currentFluencyLevel;
-	}
-	
-	
 	
 	
 	
 }
+	
+	
