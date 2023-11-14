@@ -8,6 +8,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -21,6 +22,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatcher;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -60,6 +63,37 @@ class LanguageControllerTests {
 		language2.setLanguageId(2);
 	}
 	
+	@Test
+	@DisplayName("Save language - positive")
+	public void givenCorrectObject_whenSaveLanguage_thenSavedLanguageObject() throws Exception {
+		
+		    when(mockLanguageService.createLanguage(ArgumentMatchers.any(Language.class))).thenReturn(language1);
+		    
+		
+		    
+mockMvc.perform(post("/api/v1/languages").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(language1))).andDo(print())
+.andExpect(status().isCreated());
+
+
+		    
+		    verify(mockLanguageService, times(1)).createLanguage(ArgumentMatchers.any(Language.class));
+		}
+	
+	@Test
+	@DisplayName("Save language - negative")
+	public void givenIncorrectObject_whenSaveLanguage_thenSavedReturnError() throws Exception {
+			language1.setLanguageName(null);
+		    when(mockLanguageService.createLanguage(ArgumentMatchers.any(Language.class))).thenReturn(language1);
+		    
+		
+		    
+mockMvc.perform(post("/api/v1/languages").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(language1))).andDo(print())
+.andExpect(status().isBadRequest());
+
+
+		    
+		    verify(mockLanguageService, times(0)).createLanguage(ArgumentMatchers.any(Language.class));
+		}
 	
 
 	@Test
