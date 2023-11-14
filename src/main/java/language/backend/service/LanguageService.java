@@ -14,6 +14,6 @@ public interface LanguageService {
 
 	boolean updateLanguageById(Integer id, Language language);
 
-//	List<Language> findLanguagesByDifficultyLevel(String difficultyLevel);
+	List<Language> findLanguagesByDifficultyLevel(String difficultyLevel);
 
 }

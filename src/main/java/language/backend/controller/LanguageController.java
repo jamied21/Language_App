@@ -84,5 +84,21 @@ public class LanguageController {
 
 		return new ResponseEntity<>(this.languageService.findAllLanguages(), HttpStatus.OK);
 	}
+	
+	@GetMapping("/difficultyLevel/{difficultyLevel}")
+	public ResponseEntity<?> findLanguageByDifficultyLevel(@PathVariable String difficultyLevel ) {
+		
+		List<Language> langaugesInDb = this.languageService.findLanguagesByDifficultyLevel(difficultyLevel);
+		
+		if(langaugesInDb == null) {
+			
+			return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			
+		}
+		
+		return new ResponseEntity<>(langaugesInDb, HttpStatus.OK);
+		
+		
+	}
 
 }
