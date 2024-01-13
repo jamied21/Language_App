@@ -10,4 +10,6 @@ public interface LanguageRepository extends JpaRepository<Language, Integer> {
 
 	List<Language> findByDifficultyLevel(String difficultyLevel);
 
+	
+	
 }
