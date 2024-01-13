@@ -1,5 +1,11 @@
+import LanguageDropdown from "../components/LanguageDropdown";
+
 const Homepage = () => {
-  return <div></div>;
+  return (
+    <div>
+      <LanguageDropdown />
+    </div>
+  );
 };
 
 export default Homepage;
