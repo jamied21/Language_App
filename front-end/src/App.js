@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle";
 import Navbar from './components/Navbar';
 
-import LanguageList from './components/LanguageList';
+import LanguageDropdown from './components/LanguageDropdown';
 
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
       <Navbar/>
       <Routes>
         <Route path="/" element = {<Homepage/>}/>
-        <Route path="/languages" element = {<LanguageList/>}/>
+        <Route path="/languages" element = {<LanguageDropdown/>}/>
       </Routes>
 
    
