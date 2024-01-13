@@ -32,24 +32,6 @@ public class Language {
 	 * language and exposure to the language # A1 = 60-100 , A2 = 160-200, B1 =
 	 * 210-400, B2 = 260-600, # C1 = 700-800, C2 = 1000-1200
 	 * 
-	 * #Let CAT have a difficulty multiplier/coefficient of 1
-	 * 
-	 * '''
-	 * Input 
-	 * -Minutes/Hours a day you will spend a day
-	 * -Language you want to learn
-	 * - Your current fluency level A1-C1 as no point being C2 level at the start
-	 * -Fluency you want to reach A1-C2
-	 * 
-	 * 
-	 * 
-	 * Returns ------- How many days are needed to reach desired level
-	 * fluency level of target language
-	 * '''
-	 * 
-	 * public languageCalculator(minutes,lang,fluency level):
-	 * 
-	 * 
 	 * #M1 is the multiplier for cat 1 languages and so on
 	 * 
 	 * M1 = 1 M2 = round(900/750, 1) M3 = round(1100/750, 1) M4 = round(2200/750,1)
@@ -82,22 +64,30 @@ public class Language {
 		this.languageName = languageName;
 	}
 	
+	/**
+	 * Calculates the number of days required to reach the desired fluency level in a target language.
+	 *
+	 * @param dailyStudyTime      the daily study time in hours
+	 * @param language            the target language
+	 * @param currentFluencyLevel the current fluency level (A1, A2, B1, B2, C1, C2)
+	 * @param desiredFluencyLevel the desired fluency level (A2, B1, B2, C1, C2)
+	 * @return the number of days required to reach the desired fluency level
+	 */
 	
-	
-public Double fluencyCalculator(Double dailyStudyTime, Language language, String currentFluencyLevel, String desiredFluencyLevel ) {
+public Double timeToFluencyCalculator(Double dailyStudyTime, Language language, String currentFluencyLevel, String desiredFluencyLevel ) {
 		
-		// (( Hours for target fluency level - hours of current fluency level) / (minutesStudied) ) * Multiplier
-					// Need to hard code fluency levels to number of hours studied, do this using a hashmap
-					// A1 = 7% of hours to reach C2 Level
-					// A2 = 16% of hours to reach C2 Level
-					// B1 = 34% of hours to reach C2 Level
-					// B2 = 54% of hours to reach C2 Level
-					// C1 = 78% of hours to reach C2 Level
-					// C2 = 100% of hours to reach C2 Level
+	// (( Hours for target fluency level - hours of current fluency level) / (hourStudied) ) * Multiplier
+	// A1 = 7% of hours to reach C2 Level
+	// A2 = 16% of hours to reach C2 Level
+	// B1 = 34% of hours to reach C2 Level
+	// B2 = 54% of hours to reach C2 Level
+	// C1 = 78% of hours to reach C2 Level
+	// C2 = 100% of hours to reach C2 Level
 		
 		// I do not expect these values to change hence I have hardcoded them into the method
 		//These are the hours needed for each level for a Cat1 language
 		HashMap<String, Integer> levelToHours = new HashMap<String, Integer>();
+		levelToHours.put("A0", 0); // Complete beginner, no past knowledge
 		levelToHours.put("A1", 67);
 		levelToHours.put("A2", 154);
 		levelToHours.put("B1", 326);
@@ -109,36 +99,36 @@ public Double fluencyCalculator(Double dailyStudyTime, Language language, String
 		
 		if (language.getDifficultyLevel().equals("Cat1")) {
 			
-			Double catOnemultiplier = 1.0;
+			// catOnemultiplier = 1.0;
 			
-			daysToFluency = ((levelToHours.get(desiredFluencyLevel)-levelToHours.get(currentFluencyLevel))/dailyStudyTime) * catOnemultiplier;
+			daysToFluency = ((levelToHours.get(desiredFluencyLevel)-levelToHours.get(currentFluencyLevel))/dailyStudyTime) ;
 	
 			
 		}
 		
 		else if (language.getDifficultyLevel().equals("Cat2")) {
 			
-			Double catTwomultiplier = 1.0;
+			// catTwomultiplier = 1.2; 900/750
 			
-			daysToFluency = ((levelToHours.get(desiredFluencyLevel)-levelToHours.get(currentFluencyLevel))/dailyStudyTime) * catTwomultiplier;
+			daysToFluency = ((levelToHours.get(desiredFluencyLevel)-levelToHours.get(currentFluencyLevel))/dailyStudyTime) * 1.2;
 	
 			
 		}
 		
 		else if (language.getDifficultyLevel().equals("Cat3")) {
 			
-			Double catThreemultiplier = 1.0;
+			//catThreemultiplier = 1.5; 1100 / 750
 			
-			daysToFluency = ((levelToHours.get(desiredFluencyLevel)-levelToHours.get(currentFluencyLevel))/dailyStudyTime) * catThreemultiplier;
+			daysToFluency = ((levelToHours.get(desiredFluencyLevel)-levelToHours.get(currentFluencyLevel))/dailyStudyTime) * 1.5;
 	
 			
 		}
 		
 		else if (language.getDifficultyLevel().equals("Cat4")) {
 			
-			Double catFourmultiplier = 1.0;
+			// catFourmultiplier = 2.9; 750/2200
 			
-			daysToFluency = ((levelToHours.get(desiredFluencyLevel)-levelToHours.get(currentFluencyLevel))/dailyStudyTime) * catFourmultiplier;
+			daysToFluency = ((levelToHours.get(desiredFluencyLevel)-levelToHours.get(currentFluencyLevel))/dailyStudyTime) * 2.9;
 	
 			
 		}
