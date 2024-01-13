@@ -11,6 +11,12 @@ const LanguageDropdown = () => {
   const [dailyStudyTime, setDailyStudyTime] = useState("");
   const [calculatedTimeToFluency, setCalculatedTimeToFluency] = useState(null);
 
+  // Error messages
+  const [languageError, setLanguageError] = useState("");
+  const [currentFluencyError, setCurrentFluencyError] = useState("");
+  const [desiredFluencyError, setDesiredFluencyError] = useState("");
+  const [studyTimeError, setStudyTimeError] = useState("");
+
   const timeToFluencyCalculator = (
     dailyStudyTime,
     currentFluencyLevel,
@@ -45,18 +51,36 @@ const LanguageDropdown = () => {
   };
 
   const handleSubmit = () => {
+    // Reset error messages
+    setLanguageError("");
+    setCurrentFluencyError("");
+    setDesiredFluencyError("");
+    setStudyTimeError("");
+
+    // Validation
     if (!selectedLanguageId) {
-      console.error("Please select a language");
+      setLanguageError("Please select a language");
+      return;
+    }
+
+    if (!currentFluencyLevel) {
+      setCurrentFluencyError("Please select the current fluency level");
+      return;
+    }
+
+    if (!desiredFluencyLevel) {
+      setDesiredFluencyError("Please select the desired fluency level");
       return;
     }
 
     if (isNaN(dailyStudyTime) || dailyStudyTime <= 0) {
-      console.error(
+      setStudyTimeError(
         "Please enter a valid positive number for daily study time"
       );
       return;
     }
 
+    // Calculate time to fluency
     const calculatedTimeToFluency = timeToFluencyCalculator(
       parseFloat(dailyStudyTime),
       currentFluencyLevel,
@@ -67,8 +91,8 @@ const LanguageDropdown = () => {
   };
 
   useEffect(() => {
-    loadLanguages();
-  }, []);
+    setCalculatedTimeToFluency(null);
+  }, [selectedLanguageId]);
 
   useEffect(() => {
     loadLanguages();
@@ -80,8 +104,11 @@ const LanguageDropdown = () => {
         <div className="form-group">
           <label>Select a Language:</label>
           <select
-            className="form-control"
-            onChange={(e) => setSelectedLanguageId(e.target.value)}
+            className={`form-control ${languageError && "is-invalid"}`}
+            onChange={(e) => {
+              setSelectedLanguageId(e.target.value);
+              setLanguageError("");
+            }}
             value={selectedLanguageId}
           >
             <option value="">Select a Language</option>
@@ -91,13 +118,19 @@ const LanguageDropdown = () => {
               </option>
             ))}
           </select>
+          {languageError && (
+            <div className="invalid-feedback">{languageError}</div>
+          )}
         </div>
 
         <div className="form-group">
           <label>Current Fluency Level:</label>
           <select
-            className="form-control"
-            onChange={(e) => setCurrentFluencyLevel(e.target.value)}
+            className={`form-control ${currentFluencyError && "is-invalid"}`}
+            onChange={(e) => {
+              setCurrentFluencyLevel(e.target.value);
+              setCurrentFluencyError("");
+            }}
             value={currentFluencyLevel}
           >
             <option value="">Select Fluency Level</option>
@@ -109,13 +142,19 @@ const LanguageDropdown = () => {
             <option value="C1">C1</option>
             <option value="C2">C2</option>
           </select>
+          {currentFluencyError && (
+            <div className="invalid-feedback">{currentFluencyError}</div>
+          )}
         </div>
 
         <div className="form-group">
           <label>Desired Fluency Level:</label>
           <select
-            className="form-control"
-            onChange={(e) => setDesiredFluencyLevel(e.target.value)}
+            className={`form-control ${desiredFluencyError && "is-invalid"}`}
+            onChange={(e) => {
+              setDesiredFluencyLevel(e.target.value);
+              setDesiredFluencyError("");
+            }}
             value={desiredFluencyLevel}
           >
             <option value="">Select Fluency Level</option>
@@ -126,16 +165,25 @@ const LanguageDropdown = () => {
             <option value="C1">C1</option>
             <option value="C2">C2</option>
           </select>
+          {desiredFluencyError && (
+            <div className="invalid-feedback">{desiredFluencyError}</div>
+          )}
         </div>
 
         <div className="form-group">
           <label>Daily Study Time (hours):</label>
           <input
             type="number"
-            className="form-control"
+            className={`form-control ${studyTimeError && "is-invalid"}`}
             value={dailyStudyTime}
-            onChange={(e) => setDailyStudyTime(e.target.value)}
+            onChange={(e) => {
+              setDailyStudyTime(e.target.value);
+              setStudyTimeError("");
+            }}
           />
+          {studyTimeError && (
+            <div className="invalid-feedback">{studyTimeError}</div>
+          )}
         </div>
 
         <button
