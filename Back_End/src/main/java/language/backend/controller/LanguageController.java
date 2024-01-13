@@ -37,34 +37,7 @@ public class LanguageController {
 	}
 	
 	
-	@PostMapping("/{id}/time-to-fluency")
-    public ResponseEntity<Double> calculateTimeToFluency(
-            @PathVariable Integer id,
-            @RequestParam Double dailyStudyTime,
-            @RequestParam String currentFluencyLevel,
-            @RequestParam String desiredFluencyLevel) {
-
-        Language language = languageService.findLanguageById(id);
-
-        if (language == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        System.out.println("Received request data: ");
-        System.out.println("id: " + id);
-        System.out.println("dailyStudyTime: " + dailyStudyTime);
-        System.out.println("currentFluencyLevel: " + currentFluencyLevel);
-        System.out.println("desiredFluencyLevel: " + desiredFluencyLevel);
-
-        Double timeToFluency = language.timeToFluencyCalculator(
-                dailyStudyTime,
-                language,
-                currentFluencyLevel,
-                desiredFluencyLevel
-        );
-
-        return new ResponseEntity<>(timeToFluency, HttpStatus.OK);
-    }
-
+	
 	@PostMapping
 	public ResponseEntity<?> saveLanguage(@Valid @RequestBody Language language, BindingResult bindingResult) {
 

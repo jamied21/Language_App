@@ -11,6 +11,28 @@ const LanguageDropdown = () => {
   const [dailyStudyTime, setDailyStudyTime] = useState("");
   const [calculatedTimeToFluency, setCalculatedTimeToFluency] = useState(null);
 
+  const timeToFluencyCalculator = (
+    dailyStudyTime,
+    currentFluencyLevel,
+    desiredFluencyLevel
+  ) => {
+    const levelToHours = {
+      A0: 0,
+      A1: 67,
+      A2: 154,
+      B1: 326,
+      B2: 518,
+      C1: 750,
+      C2: 960,
+    };
+
+    const daysToFluency =
+      (levelToHours[desiredFluencyLevel] - levelToHours[currentFluencyLevel]) /
+      dailyStudyTime;
+
+    return daysToFluency;
+  };
+
   const loadLanguages = () => {
     axios
       .get(api)
@@ -21,108 +43,115 @@ const LanguageDropdown = () => {
         console.log("unable to load languages");
       });
   };
+
   const handleSubmit = () => {
-    // Check if a language is selected before making the API call
     if (!selectedLanguageId) {
       console.error("Please select a language");
       return;
     }
 
-    // Check if dailyStudyTime is a positive number
     if (isNaN(dailyStudyTime) || dailyStudyTime <= 0) {
       console.error(
         "Please enter a valid positive number for daily study time"
       );
       return;
     }
-    console.log("dailyStudyTime:", dailyStudyTime);
-    // Use Axios for the HTTP request
-    axios
-      .post(
-        `http://localhost:8080/api/v1/languages/${selectedLanguageId}/time-to-fluency`,
-        {
-          dailyStudyTime,
-          currentFluencyLevel,
-          desiredFluencyLevel,
-        }
-      )
-      .then((response) => {
-        setCalculatedTimeToFluency(response.data);
-      })
-      .catch((error) => {
-        console.error("Error calculating time to fluency:", error);
-        // Log the error response
-        if (error.response) {
-          console.error("Response data:", error.response.data);
-          console.error("Response status:", error.response.status);
-          console.error("Response headers:", error.response.headers);
-        }
-      });
+
+    const calculatedTimeToFluency = timeToFluencyCalculator(
+      parseFloat(dailyStudyTime),
+      currentFluencyLevel,
+      desiredFluencyLevel
+    );
+
+    setCalculatedTimeToFluency(calculatedTimeToFluency);
   };
 
   useEffect(() => {
     loadLanguages();
   }, []);
 
+  useEffect(() => {
+    loadLanguages();
+  }, []);
+
   return (
-    <div>
-      <label>Select a Language:</label>
-      <select
-        onChange={(e) => setSelectedLanguageId(e.target.value)}
-        value={selectedLanguageId}
-      >
-        {/* Default option */}
-        <option value="">Select a Language</option>
+    <div className="container mt-4">
+      <form>
+        <div className="form-group">
+          <label>Select a Language:</label>
+          <select
+            className="form-control"
+            onChange={(e) => setSelectedLanguageId(e.target.value)}
+            value={selectedLanguageId}
+          >
+            <option value="">Select a Language</option>
+            {languages.map((language) => (
+              <option key={language.languageId} value={language.languageId}>
+                {language.languageName}
+              </option>
+            ))}
+          </select>
+        </div>
 
-        {/* Language options */}
-        {languages.map((language) => (
-          <option key={language.languageId} value={language.languageId}>
-            {language.languageName}
-          </option>
-        ))}
-      </select>
+        <div className="form-group">
+          <label>Current Fluency Level:</label>
+          <select
+            className="form-control"
+            onChange={(e) => setCurrentFluencyLevel(e.target.value)}
+            value={currentFluencyLevel}
+          >
+            <option value="">Select Fluency Level</option>
+            <option value="A0">A0</option>
+            <option value="A1">A1</option>
+            <option value="A2">A2</option>
+            <option value="B1">B1</option>
+            <option value="B2">B2</option>
+            <option value="C1">C1</option>
+            <option value="C2">C2</option>
+          </select>
+        </div>
 
-      <label>Current Fluency Level:</label>
-      <select
-        onChange={(e) => setCurrentFluencyLevel(e.target.value)}
-        value={currentFluencyLevel}
-      >
-        <option value="">Select Fluency Level</option>
-        <option value="A0">A0</option>
-        <option value="A1">A1</option>
-        <option value="A2">A2</option>
-        <option value="B1">B1</option>
-        <option value="B2">B2</option>
-        <option value="C1">C1</option>
-        <option value="C2">C2</option>
-      </select>
+        <div className="form-group">
+          <label>Desired Fluency Level:</label>
+          <select
+            className="form-control"
+            onChange={(e) => setDesiredFluencyLevel(e.target.value)}
+            value={desiredFluencyLevel}
+          >
+            <option value="">Select Fluency Level</option>
+            <option value="A1">A1</option>
+            <option value="A2">A2</option>
+            <option value="B1">B1</option>
+            <option value="B2">B2</option>
+            <option value="C1">C1</option>
+            <option value="C2">C2</option>
+          </select>
+        </div>
 
-      <label>Desired Fluency Level:</label>
-      <select
-        onChange={(e) => setDesiredFluencyLevel(e.target.value)}
-        value={desiredFluencyLevel}
-      >
-        <option value="">Select Fluency Level</option>
-        <option value="A1">A1</option>
-        <option value="A2">A2</option>
-        <option value="B1">B1</option>
-        <option value="B2">B2</option>
-        <option value="C1">C1</option>
-        <option value="C2">C2</option>
-      </select>
+        <div className="form-group">
+          <label>Daily Study Time (hours):</label>
+          <input
+            type="number"
+            className="form-control"
+            value={dailyStudyTime}
+            onChange={(e) => setDailyStudyTime(e.target.value)}
+          />
+        </div>
 
-      <label>Daily Study Time (hours):</label>
-      <input
-        type="number"
-        value={dailyStudyTime}
-        onChange={(e) => setDailyStudyTime(e.target.value)}
-      />
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={handleSubmit}
+        >
+          Calculate Time to Fluency
+        </button>
 
-      <button onClick={handleSubmit}>Calculate Time to Fluency</button>
-
-      {calculatedTimeToFluency !== null && (
-        <p>Time to Fluency: {calculatedTimeToFluency} days</p>
-      )}
+        {calculatedTimeToFluency !== null && (
+          <p className="mt-2">
+            Time to Fluency: {calculatedTimeToFluency} days
+          </p>
+        )}
+      </form>
     </div>
   );
 };
