@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+
+import "../styles/AllStyles.css";
 
 const LanguageDropdown = () => {
   const [languages, setLanguages] = useState([]);
@@ -99,7 +100,7 @@ const LanguageDropdown = () => {
   }, []);
 
   return (
-    <div className="container mt-4">
+    <div className="language-dropdown-container container mt-4">
       <form>
         <div className="form-group">
           <label>Select a Language:</label>
