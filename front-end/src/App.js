@@ -15,7 +15,7 @@ function App() {
       <Navbar/>
       <Routes>
         <Route path="/" element = {<Homepage/>}/>
-        <Route path="/languages" element = {<LanguageDropdown/>}/>
+       
       </Routes>
 
    

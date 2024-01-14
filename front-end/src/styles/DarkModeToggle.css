@@ -1,0 +1,28 @@
+/* DarkModeToggle.css */
+
+.dark-mode-toggle {
+    width:5%;
+    position:relative;
+    height: 52px;
+    cursor: pointer;
+    background-color: #3498db;
+    color: #fff;
+    border-radius: 0;
+    text-align: center;
+    margin-bottom: 0px;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    
+  }
+  
+  .dark-mode-toggle.dark {
+   
+  }
+  
+  .dark-mode-toggle svg {
+    margin-right: 5px;
+  }
+  
