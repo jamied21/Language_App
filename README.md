@@ -9,6 +9,8 @@
 - **Study Time:** Input the daily study time in hours.
 - **Time to Fluency Calculation:** Calculates the estimated time to achieve the desired fluency level based on the provided inputs.
 - **Error Handling:** Provides error messages for incomplete or invalid input.
+- **Dark Mode:** Allows users to switch between light and dark mode by clicking on the sun and moon icon. 
+- **Over 20 Languages to choose from**
 
 ## How to Use
 - **Clone the Repository:**
