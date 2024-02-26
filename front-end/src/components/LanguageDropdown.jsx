@@ -17,6 +17,7 @@ const LanguageDropdown = () => {
   const [currentFluencyError, setCurrentFluencyError] = useState("");
   const [desiredFluencyError, setDesiredFluencyError] = useState("");
   const [studyTimeError, setStudyTimeError] = useState("");
+  const [studyTimeRealisticError, setStudyTimeRealisticError] = useState("");
 
   const timeToFluencyCalculator = (
     dailyStudyTime,
@@ -57,6 +58,7 @@ const LanguageDropdown = () => {
     setCurrentFluencyError("");
     setDesiredFluencyError("");
     setStudyTimeError("");
+    setStudyTimeRealisticError("");
 
     // Validation
     if (!selectedLanguageId) {
@@ -81,6 +83,13 @@ const LanguageDropdown = () => {
       return;
     }
 
+    if (dailyStudyTime >= 14) {
+      setStudyTimeError(
+        "Are you really going to study 14 hours or more a day?"
+      );
+      return;
+    }
+
     // Calculate time to fluency
     const calculatedTimeToFluency = timeToFluencyCalculator(
       parseFloat(dailyStudyTime),
@@ -88,7 +97,7 @@ const LanguageDropdown = () => {
       desiredFluencyLevel
     );
 
-    setCalculatedTimeToFluency(calculatedTimeToFluency);
+    setCalculatedTimeToFluency(Math.ceil(calculatedTimeToFluency));
   };
 
   useEffect(() => {
@@ -180,10 +189,14 @@ const LanguageDropdown = () => {
             onChange={(e) => {
               setDailyStudyTime(e.target.value);
               setStudyTimeError("");
+              setStudyTimeRealisticError("");
             }}
           />
           {studyTimeError && (
             <div className="invalid-feedback">{studyTimeError}</div>
+          )}
+          {studyTimeRealisticError && (
+            <div className="invalid-feedback">{studyTimeRealisticError}</div>
           )}
         </div>
 
