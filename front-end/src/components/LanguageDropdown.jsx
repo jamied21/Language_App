@@ -18,6 +18,7 @@ const LanguageDropdown = () => {
   const [desiredFluencyError, setDesiredFluencyError] = useState("");
   const [studyTimeError, setStudyTimeError] = useState("");
   const [studyTimeRealisticError, setStudyTimeRealisticError] = useState("");
+  const [fluencyLevelError, setFluencyLevelError] = useState("");
 
   const timeToFluencyCalculator = (
     dailyStudyTime,
@@ -59,6 +60,17 @@ const LanguageDropdown = () => {
     setDesiredFluencyError("");
     setStudyTimeError("");
     setStudyTimeRealisticError("");
+    setFluencyLevelError("");
+
+    const fluencyLevels = {
+      A0: 0,
+      A1: 67,
+      A2: 154,
+      B1: 326,
+      B2: 518,
+      C1: 750,
+      C2: 960,
+    };
 
     // Validation
     if (!selectedLanguageId) {
@@ -86,6 +98,15 @@ const LanguageDropdown = () => {
     if (dailyStudyTime >= 14) {
       setStudyTimeError(
         "Are you really going to study 14 hours or more a day?"
+      );
+      return;
+    }
+
+    if (
+      fluencyLevels[currentFluencyLevel] > fluencyLevels[desiredFluencyLevel]
+    ) {
+      setFluencyLevelError(
+        "Desired fluency level must be higher than or equal to current fluency level"
       );
       return;
     }
@@ -140,6 +161,7 @@ const LanguageDropdown = () => {
             onChange={(e) => {
               setCurrentFluencyLevel(e.target.value);
               setCurrentFluencyError("");
+              setFluencyLevelError("");
             }}
             value={currentFluencyLevel}
           >
@@ -155,6 +177,11 @@ const LanguageDropdown = () => {
           {currentFluencyError && (
             <div className="invalid-feedback">{currentFluencyError}</div>
           )}
+          {fluencyLevelError && (
+            <div className="invalid-feedback" style={{ display: "block" }}>
+              {fluencyLevelError}
+            </div>
+          )}
         </div>
 
         <div className="form-group">
@@ -164,6 +191,7 @@ const LanguageDropdown = () => {
             onChange={(e) => {
               setDesiredFluencyLevel(e.target.value);
               setDesiredFluencyError("");
+              setFluencyLevelError("");
             }}
             value={desiredFluencyLevel}
           >
@@ -177,6 +205,11 @@ const LanguageDropdown = () => {
           </select>
           {desiredFluencyError && (
             <div className="invalid-feedback">{desiredFluencyError}</div>
+          )}
+          {fluencyLevelError && (
+            <div className="invalid-feedback" style={{ display: "block" }}>
+              {fluencyLevelError}
+            </div>
           )}
         </div>
 
@@ -192,11 +225,11 @@ const LanguageDropdown = () => {
               setStudyTimeRealisticError("");
             }}
           />
-          {studyTimeError && (
-            <div className="invalid-feedback">{studyTimeError}</div>
-          )}
-          {studyTimeRealisticError && (
-            <div className="invalid-feedback">{studyTimeRealisticError}</div>
+          {(studyTimeError || studyTimeRealisticError || fluencyLevelError) && (
+            <div className="invalid-feedback">
+              {studyTimeError && <div>{studyTimeError}</div>}
+              {studyTimeRealisticError && <div>{studyTimeRealisticError}</div>}
+            </div>
           )}
         </div>
 
