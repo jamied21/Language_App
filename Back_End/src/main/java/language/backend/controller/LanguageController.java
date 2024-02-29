@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -18,7 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
+import io.swagger.v3.oas.annotations.headers.Header;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 import jakarta.validation.Valid;
 import language.backend.model.Language;
@@ -36,7 +42,11 @@ public class LanguageController {
 		this.languageService = languageService;
 	}
 	
-	
+	@Operation(summary = "Creates a new Language resource given name and diffculty level.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "Language resource successfully created.", headers = {
+					@Header(name = "location", description = "URI to access the created resource") }, content = {
+							@Content(mediaType = MediaType.APPLICATION_JSON_VALUE) }) })
 	
 	@PostMapping
 	public ResponseEntity<?> saveLanguage(@Valid @RequestBody Language language, BindingResult bindingResult) {
@@ -56,7 +66,11 @@ public class LanguageController {
 		return new ResponseEntity<>(this.languageService.createLanguage(language), HttpStatus.CREATED);
 
 	}
-
+	@Operation(summary = "Update Language resource with the given Language details in the database.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Language resource successfully updated and returned.", headers = {
+					@Header(name = "location", description = "URI to access and return sources") }, content = {
+							@Content(mediaType = MediaType.APPLICATION_JSON_VALUE) }) })
 	@PutMapping("/{id}")
 	public ResponseEntity<?> updateLangauge(@PathVariable Integer id, @RequestBody Language language) {
 
@@ -68,6 +82,11 @@ public class LanguageController {
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
+	@Operation(summary = "Find Language resource with the given id in the database.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Language resource successfully returned.", headers = {
+					@Header(name = "location", description = "URI to access and return sources") }, content = {
+							@Content(mediaType = MediaType.APPLICATION_JSON_VALUE) }) })
 	@GetMapping("/{id}")
 	public ResponseEntity<?> findLangaugeById(@PathVariable Integer id) {
 
@@ -81,13 +100,22 @@ public class LanguageController {
 
 		return new ResponseEntity<>(languageInDb, HttpStatus.OK);
 	}
-
+	@Operation(summary = "Find all Language resources in the database.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Language resource(s) successfully returned.", headers = {
+					@Header(name = "location", description = "URI to access and return sources") }, content = {
+							@Content(mediaType = MediaType.APPLICATION_JSON_VALUE) }) })
 	@GetMapping
 	public ResponseEntity<?> findAllLanguages() {
 
 		return new ResponseEntity<>(this.languageService.findAllLanguages(), HttpStatus.OK);
 	}
 	
+	@Operation(summary = "Find Language resource with the given difficultyLevel in the database.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Langauge resource(s) successfully returned.", headers = {
+					@Header(name = "location", description = "URI to access and return sources") }, content = {
+							@Content(mediaType = MediaType.APPLICATION_JSON_VALUE) }) })
 	@GetMapping("/difficultyLevel/{difficultyLevel}")
 	public ResponseEntity<?> findLanguageByDifficultyLevel(@PathVariable String difficultyLevel ) {
 		
